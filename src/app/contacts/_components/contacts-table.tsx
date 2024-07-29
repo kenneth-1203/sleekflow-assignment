@@ -76,7 +76,7 @@ const ContactsTable = ({
       </Table>
       <DynamicPagination
         currentPage={currentPage}
-        maxVisiblePages={6}
+        maxVisiblePages={8}
         totalPages={totalPages}
         handlePaginate={handlePaginate}
       />

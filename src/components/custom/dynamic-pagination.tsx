@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import {
   Pagination,
   PaginationContent,
@@ -24,11 +25,26 @@ const DynamicPagination = ({
   totalPages,
   handlePaginate,
 }: Props) => {
+  const [dyanmicVisiblePages, setDynamicVisiblePages] =
+    useState(maxVisiblePages);
+  const isTablet = useMediaQuery({ query: "(max-width: 1100px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 480px)" });
+
+  useEffect(() => {
+    if (isMobile) {
+      setDynamicVisiblePages(2);
+    } else if (isTablet) {
+      setDynamicVisiblePages(4);
+    } else {
+      setDynamicVisiblePages(maxVisiblePages);
+    }
+  }, [isTablet, isMobile]);
+
   const renderPaginationItems = useMemo(() => {
     // Sliding window technique
 
     const pageNumbers = [];
-    const halfMaxVisiblePages = Math.floor(maxVisiblePages / 3);
+    const halfMaxVisiblePages = Math.floor(dyanmicVisiblePages / 3);
 
     let startPage = Math.max(1, currentPage - halfMaxVisiblePages);
     let endPage = Math.min(totalPages, currentPage + halfMaxVisiblePages);
@@ -37,9 +53,9 @@ const DynamicPagination = ({
     // Adjust if the window is out of bounds
     if (currentPage - halfMaxVisiblePages <= 0) {
       startPage = 1;
-      endPage = Math.min(totalPages, maxVisiblePages);
+      endPage = Math.min(totalPages, dyanmicVisiblePages);
     } else if (currentPage + halfMaxVisiblePages > totalPages) {
-      startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+      startPage = Math.max(1, totalPages - dyanmicVisiblePages + 1);
       endPage = totalPages;
     }
 
@@ -84,7 +100,7 @@ const DynamicPagination = ({
         );
       }
     });
-  }, [currentPage, totalPages, maxVisiblePages]);
+  }, [currentPage, totalPages, dyanmicVisiblePages]);
   return (
     <Pagination>
       <PaginationContent>

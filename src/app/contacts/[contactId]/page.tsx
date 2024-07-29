@@ -50,7 +50,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <main className="max-w-7xl mx-auto">
-      <div className="my-20 space-y-4">
+      <div className="my-20 mx-4 space-y-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
